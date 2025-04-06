@@ -3,15 +3,25 @@ import { useRouteProtection } from '../store/RouteContext';
 import { useWheel } from '../store/WheelContext';
 
 const SAMPLE_TEXTS = [
-  "What is real? How do you define real? If you're talking about what you can feel, what you can smell, taste and see, then real is simply electrical signals interpreted by your brain. The Matrix is everywhere, it is all around us.",
+  "What is real? How do you define real? If you're talking about what you can feel, what you can smell, taste and see, then real is simply signals.",
   
-  "The Matrix is a system, Neo. That system is our enemy. But when you're inside, you look around, what do you see? Businessmen, teachers, lawyers, carpenters. The very minds of the people we are trying to save. Until we do, these people are still a part of that system.",
+  "The Matrix is a system, Neo. That system is our enemy. When you look around, what do you see? People living their daily lives.",
   
-  "I'm trying to free your mind, Neo. But I can only show you the door. You're the one that has to walk through it. The Matrix has you, and you must type your way to freedom. Every keystroke brings you closer to reality.",
+  "I'm trying to free your mind, Neo. But I can only show you the door. You must walk through it yourself.",
   
-  "Have you ever had a dream, Neo, that you were so sure was real? What if you were unable to wake from that dream? How would you know the difference between the dream world and the real world? Your fingers on these keys are the only truth.",
+  "Have you ever had a dream that felt so real? How would you know the difference between dreams and reality?",
   
-  "You take the blue pill, the story ends, you wake up in your bed and believe whatever you want to believe. You take the red pill, you stay in Wonderland, and I show you how deep the rabbit hole goes. Remember, all I'm offering is the truth, nothing more."
+  "Take the blue pill and stay asleep. Take the red pill and see how deep the rabbit hole goes.",
+
+  "The Matrix is everywhere, it is all around us. Every day we walk past it, unaware of its presence.",
+  
+  "The very minds of the people we are trying to save. Until we do, these people are still a part of that system.",
+  
+  "Every keystroke brings you closer to reality. The truth is waiting to be discovered.",
+  
+  "Your fingers on these keys are the only truth. The real world exists beyond this illusion.",
+  
+  "Remember, all I'm offering is the truth, nothing more. The choice to see it is yours."
 ];
 
 const TIME_LIMIT = 60; // 60 seconds = 1 minute

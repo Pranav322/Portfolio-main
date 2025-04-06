@@ -106,7 +106,7 @@ function Wheel() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-90 z-50">
           <div className="bg-gray-900 p-8 rounded-lg border border-green-500 max-w-2xl w-full mx-4 relative">
             <h2 className="text-green-400 text-2xl font-bold mb-4">Matrix Typing Challenge</h2>
-            <p className="text-green-300 mb-6">Score 80 WPM or higher to bypass the wheel forever...</p>
+            <p className="text-green-300 mb-6">Score 30 WPM or higher to bypass the wheel forever...</p>
             <TypingGame onClose={() => setShowTypingGame(false)} />
             <button 
               className="absolute top-4 right-4 text-green-400 hover:text-green-300"
