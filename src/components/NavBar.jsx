@@ -9,7 +9,11 @@ export default function NavBar() {
   const wheelRef = useRef(null);
 
   const handleClick = () => {
-    setShow(true);
+    // Check if user has escaped the Matrix before showing the wheel
+    const hasEscapedMatrix = localStorage.getItem('matrixEscaped') === 'true';
+    if (!hasEscapedMatrix) {
+      setShow(true);
+    }
   };
 
   const handleClickOutside = (event) => {
@@ -17,6 +21,14 @@ export default function NavBar() {
       setShow(false);
     }
   };
+
+  // Check matrix escape status on component mount
+  useEffect(() => {
+    const hasEscapedMatrix = localStorage.getItem('matrixEscaped') === 'true';
+    if (hasEscapedMatrix) {
+      setShow(false);
+    }
+  }, [setShow]);
 
   useEffect(() => {
     if (show) {
@@ -87,7 +99,7 @@ export default function NavBar() {
       </nav>
 
       {/* Render WheelComponent conditionally */}
-      {show && (
+      {show && !localStorage.getItem('matrixEscaped') && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50">
           <div ref={wheelRef}>
             <Wheel setShow={setShow} />  {/* Pass setShow as a prop */}

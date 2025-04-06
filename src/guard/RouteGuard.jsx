@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRouteProtection } from '../store/RouteContext';
 
 const RouteGuard = ({ children }) => {
-  const { allowedRoute } = useRouteProtection();
+  const { allowedRoute, setAllowedRoute } = useRouteProtection();
   const navigate = useNavigate();
   const location = useLocation();
 
-  React.useEffect(() => {
-    // Check if the current location is allowed
-    if (location.pathname !== allowedRoute) {
+  useEffect(() => {
+    // Check if user has escaped the Matrix
+    const hasEscapedMatrix = localStorage.getItem('matrixEscaped') === 'true';
+    
+    // If user has escaped Matrix, allow all routes
+    if (hasEscapedMatrix) {
+      setAllowedRoute('*');
+      return;
+    }
+    
+    // If user hasn't escaped the Matrix and trying to access a restricted route
+    if (!hasEscapedMatrix && allowedRoute !== '*' && location.pathname !== allowedRoute) {
       navigate(allowedRoute, { replace: true });
     }
-  }, [allowedRoute, location.pathname, navigate]);
+  }, [allowedRoute, location.pathname, navigate, setAllowedRoute]);
 
   return children;
 };
