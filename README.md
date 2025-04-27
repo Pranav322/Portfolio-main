@@ -1,4 +1,5 @@
 # Portfolio
-Too lazy to write more about it please visit [here](pranaw.vercel.app).
+Too lazy to explain everything — check it out [here](https://pranaw.vercel.app).
+
 
 
