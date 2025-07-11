@@ -3,7 +3,7 @@ import { useWheel } from '../store/WheelContext';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
 import { useRouteProtection } from '../store/RouteContext'; // Import useRouteProtection
 import { useState } from 'react'; // Import useState for managing state
-import TypingGame from './TypingGame';
+import PaymentGame from './PaymentGame';
 
 function Wheel() {
   const { setShow } = useWheel(); // Use the global state
@@ -12,7 +12,7 @@ function Wheel() {
 
   const [winner, setWinner] = useState(""); // Winner state
   const [loading, setLoading] = useState(false); // Loading state to control when to show the wheel and redirection message
-  const [showTypingGame, setShowTypingGame] = useState(false);
+  const [showPaymentGame, setShowPaymentGame] = useState(false);
 
   const segments = ["Home", "About", "Projects", "Skills", "Contact"];
   const segColors = [
@@ -59,8 +59,8 @@ function Wheel() {
     }, 2000); // 3000ms = 3 seconds
   };
 
-  const handleTypingGameClick = () => {
-    setShowTypingGame(true);
+  const handlePaymentGameClick = () => {
+    setShowPaymentGame(true);
   };
 
   return (
@@ -69,8 +69,8 @@ function Wheel() {
       {!loading && (
         <div className="text-center mb-4 text-xl font-semibold text-white">
           Uh Oh! Not so fast! <br /> Spin the wheel first
-          <div className="mt-2 text-sm font-normal text-green-400 cursor-pointer hover:text-green-300 transition-colors duration-300" onClick={handleTypingGameClick}>
-            Or... Want to escape the Matrix? Pass this game
+          <div className="mt-2 text-sm font-normal text-green-400 cursor-pointer hover:text-green-300 transition-colors duration-300" onClick={handlePaymentGameClick}>
+            Or... Want to escape the Matrix? Pay ₹1 and be free forever! 💰
           </div>
         </div>
       )}
@@ -101,16 +101,14 @@ function Wheel() {
         </div>
       )}
 
-      {/* Typing Game Modal */}
-      {showTypingGame && (
+      {/* Payment Game Modal */}
+      {showPaymentGame && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-90 z-50">
           <div className="bg-gray-900 p-8 rounded-lg border border-green-500 max-w-2xl w-full mx-4 relative">
-            <h2 className="text-green-400 text-2xl font-bold mb-4">Matrix Typing Challenge</h2>
-            <p className="text-green-300 mb-6">Score 30 WPM or higher to bypass the wheel forever...</p>
-            <TypingGame onClose={() => setShowTypingGame(false)} />
+            <PaymentGame onClose={() => setShowPaymentGame(false)} />
             <button 
               className="absolute top-4 right-4 text-green-400 hover:text-green-300"
-              onClick={() => setShowTypingGame(false)}
+              onClick={() => setShowPaymentGame(false)}
             >
               ✕
             </button>
