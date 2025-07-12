@@ -63,6 +63,14 @@ function Wheel() {
     setShowPaymentGame(true);
   };
 
+  const handlePaymentSuccess = () => {
+    // Mark matrix as escaped
+    localStorage.setItem('matrixEscaped', 'true');
+    setShowPaymentGame(false);
+    setShow(false);
+    // Refresh the page to update the navigation state
+    window.location.reload();
+  };
   return (
     <div className="relative flex flex-col items-center justify-center p-4">
       {/* Message Above the Wheel */}
@@ -105,7 +113,7 @@ function Wheel() {
       {showPaymentGame && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-90 z-50">
           <div className="bg-gray-900 p-8 rounded-lg border border-green-500 max-w-2xl w-full mx-4 relative">
-            <PaymentGame onClose={() => setShowPaymentGame(false)} />
+            <PaymentGame onSuccess={handlePaymentSuccess} />
             <button 
               className="absolute top-4 right-4 text-green-400 hover:text-green-300"
               onClick={() => setShowPaymentGame(false)}

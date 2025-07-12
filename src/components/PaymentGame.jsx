@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 const PaymentGame = ({ onSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasAccess, setHasAccess] = useState(false);
+  const [razorpayLoaded, setRazorpayLoaded] = useState(false);
 
   useEffect(() => {
     // Check if user has already paid
@@ -11,9 +12,25 @@ const PaymentGame = ({ onSuccess }) => {
       setHasAccess(true);
       onSuccess && onSuccess();
     }
+
+    // Check if Razorpay is loaded
+    const checkRazorpay = () => {
+      if (window.Razorpay) {
+        setRazorpayLoaded(true);
+      } else {
+        // If not loaded, wait a bit and check again
+        setTimeout(checkRazorpay, 100);
+      }
+    };
+    checkRazorpay();
   }, [onSuccess]);
 
   const handlePayment = async () => {
+    if (!razorpayLoaded) {
+      alert('Payment system is loading. Please try again in a moment.');
+      return;
+    }
+
     setIsLoading(true);
     
     try {
@@ -31,19 +48,21 @@ const PaymentGame = ({ onSuccess }) => {
       
       const order = await response.json();
       
+      if (!order.success) {
+        throw new Error(order.message || 'Failed to create order');
+      }
+
       // Initialize Razorpay
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_9999999999',
-        amount: order.amount,
-        currency: order.currency,
+        amount: order.order.amount,
+        currency: order.order.currency,
         name: 'Portfolio Access',
         description: 'One-time payment for portfolio access',
-        order_id: order.id,
+        order_id: order.order.id,
         handler: function (response) {
-          // Payment successful
-          localStorage.setItem('portfolioAccess', 'paid');
-          setHasAccess(true);
-          onSuccess && onSuccess();
+          // Verify payment on backend
+          verifyPayment(response);
         },
         prefill: {
           name: 'User',
@@ -70,6 +89,35 @@ const PaymentGame = ({ onSuccess }) => {
     }
   };
 
+  const verifyPayment = async (paymentResponse) => {
+    try {
+      const response = await fetch('https://portfolio-main-ypr0.onrender.com/api/verify-payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          razorpay_payment_id: paymentResponse.razorpay_payment_id,
+          razorpay_order_id: paymentResponse.razorpay_order_id,
+          razorpay_signature: paymentResponse.razorpay_signature,
+        }),
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        localStorage.setItem('portfolioAccess', 'paid');
+        localStorage.setItem('matrixEscaped', 'true');
+        setHasAccess(true);
+        onSuccess && onSuccess();
+      } else {
+        alert('Payment verification failed. Please contact support.');
+      }
+    } catch (error) {
+      console.error('Payment verification error:', error);
+      alert('Payment verification failed. Please contact support.');
+    }
+  };
   if (hasAccess) {
     return null; // User has access, don't show payment component
   }
@@ -85,10 +133,10 @@ const PaymentGame = ({ onSuccess }) => {
         </p>
         <button
           onClick={handlePayment}
-          disabled={isLoading}
+          disabled={isLoading || !razorpayLoaded}
           className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white font-bold py-3 px-4 rounded transition-colors"
         >
-          {isLoading ? 'Processing...' : 'Pay ₹1 & Get Access'}
+          {isLoading ? 'Processing...' : !razorpayLoaded ? 'Loading...' : 'Pay ₹1 & Get Access'}
         </button>
         <p className="text-green-500 text-sm mt-4 text-center">
           Secure payment powered by Razorpay
