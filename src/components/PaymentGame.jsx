@@ -18,7 +18,7 @@ const PaymentGame = ({ onSuccess }) => {
     
     try {
       // Create order on backend (you'll need to implement this)
-      const response = await fetch('/api/create-order', {
+      const response = await fetch('https://portfolio-main-ypr0.onrender.com/api/create-order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
